@@ -86,5 +86,7 @@ else
     [gzsl_seen_acc, gzsl_unseen_acc, H] = Bayesian_ZSL(x_tr, y_tr, x_ts_us, y_ts_us, x_ts_s, y_ts_s, att,'Model', model_version,'num_neighbor', K,...
                                                        'kappa_0', k_0, 'kappa_1', k_1, 'invg_shape', a_0, 'invg_scale', b_0);
 end
-                                               
+
+fprintf('BZSL (%s version) results on %s dataset: Seen acc: %.2f%% Unseen acc: %.2f%%, Harmonic mean: %.2f%% \n', ...
+        model_version, dataset, gzsl_seen_acc*100, gzsl_unseen_acc*100, H*100);
                                                

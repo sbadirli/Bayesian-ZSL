@@ -38,7 +38,8 @@ function [gzsl_seen_acc, gzsl_unseen_acc, H] = Bayesian_ZSL(x_tr, y_tr, x_ts_us,
     params      = varargin;
     [k_0,k_1, m, a_0, b_0, mu_0, s, scatter, K, num_iter, pca_dim, Model, tuning] = hyperparameter_setting(x_tr, params);
     
-    % num_iter for repeating the procedure several times to eleminate randomness
+    % num_iter for repeating the procedure several times to eleminate
+    % randomness
     % You may change the # features to use by changing d0
     if pca_dim 
         % Dimentionality reduction from PCA
@@ -93,6 +94,7 @@ function [gzsl_seen_acc, gzsl_unseen_acc, H] = Bayesian_ZSL(x_tr, y_tr, x_ts_us,
             % Component predictive cov, mean and DoF from constrained model
             [Sig_s,mu_s,v_s,class_id] = constrained_tuning(xn,yn,att_seen,att_unseen,us_classes, K,mu_0,k_0,k_1,a_0,b_0);
             %save('pred_pars.mat', 'Sig_s', 'mu_s', 'v_s', 'class_id');
+            
             % Predicting labels for the test data from unseen and seen classes 
             % utilizing cov, mean and dof from the model. Max likelihood with stu-t 
             [ypred_unseen(:,iter), prob_mat_us] = constrained_predicting(xt_unseen, Sig_s, mu_s, v_s, class_id);
@@ -101,8 +103,7 @@ function [gzsl_seen_acc, gzsl_unseen_acc, H] = Bayesian_ZSL(x_tr, y_tr, x_ts_us,
            
             % Class predictive cov, mean and DoF from unconstrained model
             [Sig_s,mu_s,v_s,class_id,Sigmas]    = unconstrained_tuning(xn,yn,att_seen,att_unseen,us_classes, K,Psi,mu_0,m,k_0,k_1);
-            %save('/Users/sarkhanbadirli/Desktop/ZSL/data/params.mat', 'Sigmas', 'mu_s', 'v_s', 'class_id');
-            %save('C:\Users\sbadirli.ADS\Desktop\ZSL good bad ugly\data\params.mat', 'Sigmas', 'mu_s', 'v_s', 'class_id');
+            
             % Prediction phase
             [ypred_unseen(:,iter), prob_mat_us] = unconstrained_predicting(xt_unseen, Sig_s, mu_s, v_s, class_id);
             [ypred_seen(:,iter), prob_mat_s]    = unconstrained_predicting(xt_seen, Sig_s, mu_s, v_s, class_id);
@@ -124,7 +125,7 @@ function [gzsl_seen_acc, gzsl_unseen_acc, H] = Bayesian_ZSL(x_tr, y_tr, x_ts_us,
     end
 
     % Generalized zero-shot learning unseen class accuracy -- average
-    gzsl_unseen_acc = mean(acc_per_class)
+    gzsl_unseen_acc = mean(acc_per_class);
 
 
     % Accuracy calculation for seen classes
@@ -137,11 +138,9 @@ function [gzsl_seen_acc, gzsl_unseen_acc, H] = Bayesian_ZSL(x_tr, y_tr, x_ts_us,
         acc_per_class(i) = sum(y_ts_s(idx) == ypred1(idx)) / length(idx);
     end
 
-    gzsl_seen_acc   = mean(acc_per_class)
+    gzsl_seen_acc   = mean(acc_per_class);
 
     % Harmonic mean for seen and unseen classes acc. from Y. Xian paper
-    H               = 2 * gzsl_unseen_acc * gzsl_seen_acc / (gzsl_unseen_acc + gzsl_seen_acc);   
-    %H_list(iter)  = H;
-    
-    fprintf('Averaged Harmonic mean: %.4f\n', H);
+    H = 2 * gzsl_unseen_acc * gzsl_seen_acc / (gzsl_unseen_acc + gzsl_seen_acc);   
+
 end
