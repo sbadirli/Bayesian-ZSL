@@ -52,7 +52,7 @@
 clear all;
 %clc;
 
-datapath = 'C:\Users\sbadirli\Dropbox\My PC (DESKTOP-5LTVPHA)\Desktop\Bayesian ZSL\data\';
+datapath = '.\data\';
 dataset = 'CUB';
 
 fname1=[datapath, dataset, '\res101.mat'];   
