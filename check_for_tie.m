@@ -7,9 +7,6 @@ function flag = check_for_tie(all_classes, curr_classes)
     for i=1:len
         if isempty(setdiff(all_classes{i}, curr_classes)) && length(curr_classes)==length(all_classes{i})
             flag = 1;
-            fprintf('Found a tie!!!\n');
-            all_classes{i}
-            curr_classes
             break;
         end
     end    

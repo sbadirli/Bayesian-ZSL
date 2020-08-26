@@ -39,6 +39,7 @@ ncl         = length(uy);
 
 % First unseen classes 
 count       = 1; 
+us_allclasses = {};
 
 for i=1:ncl
 
@@ -58,7 +59,14 @@ for i=1:ncl
     % K closest classes from seen classes + selected unseen class will 
     % construct components of this meta cluster.
     classes=seenclasses(s_ind(1:K));
-
+    
+    ect       = 1;
+    while check_for_tie(us_allclasses, classes')
+        classes(end) = seenclasses(s_ind(K+ect));
+        ect = ect+1;
+    end
+    us_allclasses{i} = classes';
+    
     % mark the indices of these classes
     nci    = length(classes);
     for j=1:nci
